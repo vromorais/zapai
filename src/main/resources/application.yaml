@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: atendimento-whatsapp
+  datasource:
+    url: jdbc:postgresql://localhost:5432/atendimento
+    username: atendimento
+    password: atendimento
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  flyway:
+    enabled: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level [%X{tenant}] [%thread] %logger - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+whatsapp:
+  base-url: https://graph.facebook.com/v18.0
+  token-env: WHATSAPP_TOKEN
+  token: ${WHATSAPP_TOKEN:token-dummy}
+  segredo-assinatura-env: WHATSAPP_SECRET
+  segredo-assinatura: ${WHATSAPP_SECRET:segredo-dummy}
+  id-numero: ${WHATSAPP_PHONE_ID:0000000000}
+
+openai:
+  base-url: https://api.openai.com/v1
+  modelo: gpt-4o-mini
+  chave-env: OPENAI_API_KEY
+  chave: ${OPENAI_API_KEY:openai-dummy}
+
+integracao-google:
+  cliente-id: ${GOOGLE_CLIENT_ID:dummy-client}
+  cliente-segredo: ${GOOGLE_CLIENT_SECRET:dummy-secret}
+  redirect-uri: http://localhost:8080/oauth/google/callback
+  escopos: https://www.googleapis.com/auth/calendar
+  base-oauth: https://accounts.google.com/o/oauth2/v2/auth
+  base-token: https://oauth2.googleapis.com/token
+  base-calendar: https://www.googleapis.com/calendar/v3
+
+ratelimit:
+  limite-por-minuto: 30
